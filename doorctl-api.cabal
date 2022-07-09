@@ -1,0 +1,17 @@
+cabal-version: 2.4
+name: doorctl-api
+version: 0.1.0.0
+
+
+library
+  build-depends:
+      aeson
+    , base <5
+    , servant
+
+  hs-source-dirs: src
+
+  exposed-modules:
+    DoorctlAPI
+
+  ghc-options: -Wall -Werror
