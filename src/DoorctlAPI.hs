@@ -15,12 +15,15 @@ module DoorctlAPI
   ) where
 
 
+import Control.DeepSeq (NFData)
 import Data.Aeson (ToJSON, FromJSON)
 import Data.ByteString (ByteString)
 import Data.ByteString.Base64.URL (encodeBase64, decodeBase64)
 import Data.Text (Text)
 import Data.Text.Encoding (encodeUtf8)
 import Data.Time.Clock (UTCTime)
+import Database.PostgreSQL.Simple.FromField (FromField)
+import Database.PostgreSQL.Simple.ToField (ToField)
 import GHC.Generics (Generic)
 import Servant.API ((:<|>), (:>), QueryParam', Required, Get, Post, JSON,
   ToHttpApiData (toQueryParam), FromHttpApiData (parseQueryParam))
@@ -30,11 +33,24 @@ type API = FetchNFCKeysAPI
       :<|> LogAccessAttemptAPI
 
 
-newtype Signature = Signature ByteString
+newtype Signature = Signature { unSignature :: ByteString }
   deriving (Eq, Ord, Generic)
 
 
-newtype NFCKey = NFCKey Text
+newtype NFCKey = NFCKey { unNFCKey :: Text }
+  deriving (Eq, Ord, Show, Generic, FromField, ToField, FromHttpApiData, ToHttpApiData)
+
+instance NFData NFCKey
+instance FromJSON NFCKey
+instance ToJSON NFCKey
+
+
+newtype NFCKeys = NFCKeys { unNFCKeys :: [NFCKey] }
+  deriving (Eq, Show, Generic)
+
+instance NFData NFCKeys
+instance FromJSON NFCKeys
+instance ToJSON NFCKeys
 
 
 data AccessAttemptResult = AccessGranted | AccessNotGranted

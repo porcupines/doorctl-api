@@ -9,6 +9,8 @@ library
     , base <5
     , base64
     , bytestring
+    , deepseq
+    , postgresql-simple
     , servant
     , text
     , time
