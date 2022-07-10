@@ -55,7 +55,7 @@ data AccessAttemptResult = AccessGranted | AccessNotGranted
 -- by the client whose public key is pre-configured on the server.
 type FetchNFCKeysAPI = QueryParam' '[Required] "time" UTCTime
                     :> QueryParam' '[Required] "signature" Signature
-                    :> Get '[JSON] [NFCKey]
+                    :> Get '[JSON] NFCKeys
 
 
 -- This endpoint logs an access attempt, providing an ED25519 signature
