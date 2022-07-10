@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
@@ -19,7 +20,9 @@ module DoorctlAPI
 import Control.DeepSeq (NFData)
 import Data.Aeson (ToJSON, FromJSON)
 import Data.ByteString (ByteString)
+#ifndef ghcjs__HOST_OS
 import Data.ByteString.Base64.URL (encodeBase64, decodeBase64)
+#endif
 import Data.Text (Text)
 import Data.Text.Encoding (encodeUtf8)
 import Data.Time.Clock (UTCTime)
@@ -43,7 +46,6 @@ newtype NFCKey = NFCKey { unNFCKey :: Text }
 
 newtype NFCKeys = NFCKeys { unNFCKeys :: [NFCKey] }
   deriving (Eq, Show, Generic)
-
 
 
 data AccessAttemptResult = AccessGranted | AccessNotGranted
@@ -83,14 +85,22 @@ instance NFData NFCKeys
 instance FromJSON NFCKeys
 instance ToJSON NFCKeys
 
-instance ToHttpApiData Signature where
-  toQueryParam (Signature x) = encodeBase64 x
-
-instance FromHttpApiData Signature where
-  parseQueryParam x = Signature <$> decodeBase64 (encodeUtf8 x)
-
 instance ToJSON AccessAttemptResult
 instance FromJSON AccessAttemptResult
+
+instance ToHttpApiData Signature where
+#ifndef ghcjs_HOST_OS
+  toQueryParam (Signature x) = encodeBase64 x
+#else
+  toQueryParam = error "ToHttpApiData Signature not implemented in ghcjs"
+#endif
+
+instance FromHttpApiData Signature where
+#ifndef ghcjs_HOST_OS
+  parseQueryParam x = Signature <$> decodeBase64 (encodeUtf8 x)
+#else
+  parseQueryParam = error "FromHttpApiData Signature not implemented in ghcjs"
+#endif
 
 instance ToHttpApiData AccessAttemptResult where
   toQueryParam AccessGranted = "granted"

@@ -7,13 +7,15 @@ library
   build-depends:
       aeson
     , base <5
-    , base64
     , bytestring
     , deepseq
     , postgresql-simple
     , servant
     , text
     , time
+
+  if !impl(ghcjs)
+    build-depends: base64
 
   hs-source-dirs: src
 
