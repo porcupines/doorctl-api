@@ -20,7 +20,7 @@ module DoorctlAPI
 import Control.DeepSeq (NFData)
 import Data.Aeson (ToJSON, FromJSON)
 import Data.ByteString (ByteString)
-#ifndef ghcjs__HOST_OS
+#ifndef ghcjs_HOST_OS
 import Data.ByteString.Base64.URL (encodeBase64, decodeBase64)
 #endif
 import Data.Text (Text)
