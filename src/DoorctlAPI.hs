@@ -70,6 +70,8 @@ type LogAccessAttemptAPI = "log-access-attempt"
                         :> Post '[JSON] ()
 
 
+instance NFData AccessAttemptResult
+
 instance ToField AccessAttemptResult where
   toField = toField . (== AccessGranted)
 
