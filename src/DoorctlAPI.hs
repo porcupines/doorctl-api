@@ -23,8 +23,8 @@ import Data.ByteString.Base64.URL (encodeBase64, decodeBase64)
 import Data.Text (Text)
 import Data.Text.Encoding (encodeUtf8)
 import Data.Time.Clock (UTCTime)
-import Database.PostgreSQL.Simple.FromField (FromField)
-import Database.PostgreSQL.Simple.ToField (ToField)
+import Database.PostgreSQL.Simple.FromField (FromField (fromField))
+import Database.PostgreSQL.Simple.ToField (ToField (toField))
 import GHC.Generics (Generic)
 import Servant.API ((:<|>), (:>), QueryParam', Required, Get, Post, JSON,
   ToHttpApiData (toQueryParam), FromHttpApiData (parseQueryParam))
@@ -41,17 +41,9 @@ newtype Signature = Signature { unSignature :: ByteString }
 newtype NFCKey = NFCKey { unNFCKey :: Text }
   deriving (Eq, Ord, Show, Generic, FromField, ToField, FromHttpApiData, ToHttpApiData)
 
-instance NFData NFCKey
-instance FromJSON NFCKey
-instance ToJSON NFCKey
-
-
 newtype NFCKeys = NFCKeys { unNFCKeys :: [NFCKey] }
   deriving (Eq, Show, Generic)
 
-instance NFData NFCKeys
-instance FromJSON NFCKeys
-instance ToJSON NFCKeys
 
 
 data AccessAttemptResult = AccessGranted | AccessNotGranted
@@ -73,6 +65,23 @@ type LogAccessAttemptAPI = QueryParam' '[Required] "time" UTCTime
                         :> QueryParam' '[Required] "nfcKey" NFCKey
                         :> Post '[JSON] ()
 
+
+instance ToField AccessAttemptResult where
+  toField = toField . (== AccessGranted)
+
+instance FromField AccessAttemptResult where
+  fromField f b = fromBool <$> fromField f b
+    where
+      fromBool True = AccessGranted
+      fromBool False = AccessNotGranted
+
+instance NFData NFCKey
+instance FromJSON NFCKey
+instance ToJSON NFCKey
+
+instance NFData NFCKeys
+instance FromJSON NFCKeys
+instance ToJSON NFCKeys
 
 instance ToHttpApiData Signature where
   toQueryParam (Signature x) = encodeBase64 x
