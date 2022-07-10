@@ -55,14 +55,16 @@ data AccessAttemptResult = AccessGranted | AccessNotGranted
 -- This endpoint fetches the list of active NFC keys, providing a recent
 -- time and an ED25519 signature for that time using a key possessed
 -- by the client whose public key is pre-configured on the server.
-type FetchNFCKeysAPI = QueryParam' '[Required] "time" UTCTime
+type FetchNFCKeysAPI = "fetch-nfc-keys"
+                    :> QueryParam' '[Required] "time" UTCTime
                     :> QueryParam' '[Required] "signature" Signature
                     :> Get '[JSON] NFCKeys
 
 
 -- This endpoint logs an access attempt, providing an ED25519 signature
 -- for the access attempt using the same key.
-type LogAccessAttemptAPI = QueryParam' '[Required] "time" UTCTime
+type LogAccessAttemptAPI = "log-access-attempt"
+                        :> QueryParam' '[Required] "time" UTCTime
                         :> QueryParam' '[Required] "result" AccessAttemptResult
                         :> QueryParam' '[Required] "nfcKey" NFCKey
                         :> Post '[JSON] ()
