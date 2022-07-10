@@ -8,6 +8,7 @@
 module DoorctlAPI
   ( Signature (..)
   , NFCKey (..)
+  , NFCKeys (..)
   , AccessAttemptResult (..)
   , API
   , FetchNFCKeysAPI
