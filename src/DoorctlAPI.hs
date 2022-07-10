@@ -22,9 +22,9 @@ import Data.Aeson (ToJSON, FromJSON)
 import Data.ByteString (ByteString)
 #ifndef ghcjs_HOST_OS
 import Data.ByteString.Base64.URL (encodeBase64, decodeBase64)
+import Data.Text.Encoding (encodeUtf8)
 #endif
 import Data.Text (Text)
-import Data.Text.Encoding (encodeUtf8)
 import Data.Time.Clock (UTCTime)
 import Database.PostgreSQL.Simple.FromField (FromField (fromField))
 import Database.PostgreSQL.Simple.ToField (ToField (toField))
