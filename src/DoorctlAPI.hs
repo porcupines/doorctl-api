@@ -55,7 +55,7 @@ instance ToJSON NFCKeys
 
 
 data AccessAttemptResult = AccessGranted | AccessNotGranted
-  deriving (Eq, Ord, Generic)
+  deriving (Eq, Ord, Generic, Show)
 
 
 -- This endpoint fetches the list of active NFC keys, providing a recent
