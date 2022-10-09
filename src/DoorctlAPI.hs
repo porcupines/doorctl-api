@@ -67,6 +67,7 @@ type LogAccessAttemptAPI = "log-access-attempt"
                         :> QueryParam' '[Required] "time" UTCTime
                         :> QueryParam' '[Required] "result" AccessAttemptResult
                         :> QueryParam' '[Required] "nfcKey" NFCKey
+                        :> QueryParam' '[Required] "signature" Signature
                         :> Post '[JSON] ()
 
 
