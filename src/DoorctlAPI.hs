@@ -89,7 +89,7 @@ instance Serialise NFCKey
 
 
 newtype NFCKeys = NFCKeys { unNFCKeys :: [NFCKey] }
-  deriving (Eq, Show, Generic, Show)
+  deriving (Eq, Show, Generic)
 
 
 data AccessAttemptResult = AccessGranted | AccessNotGranted
