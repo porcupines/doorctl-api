@@ -45,15 +45,15 @@ type API = FetchNFCKeysAPI
 
 
 newtype Signature = Signature { unSignature :: ByteString }
-  deriving (Eq, Ord, Generic)
+  deriving (Eq, Ord, Generic, Show)
 
 
 newtype PublicSigningKey = PublicSigningKey { unPublicKey :: ByteString }
-  deriving (Eq, Ord, Generic)
+  deriving (Eq, Ord, Generic, Show)
 
 
 newtype PrivateSigningKey = PrivateSigningKey { unPrivateKey :: ByteString }
-  deriving (Eq, Ord, Generic)
+  deriving (Eq, Ord, Generic, Show)
 
 
 sign :: Serialise a
@@ -83,13 +83,13 @@ verifySignature (PublicSigningKey psk) x sig =
 
 
 newtype NFCKey = NFCKey { unNFCKey :: Text }
-  deriving (Eq, Ord, Show, Generic, FromField, ToField, FromHttpApiData, ToHttpApiData)
+  deriving (Eq, Ord, Show, Generic, FromField, ToField, FromHttpApiData, ToHttpApiData, Show)
 
 instance Serialise NFCKey
 
 
 newtype NFCKeys = NFCKeys { unNFCKeys :: [NFCKey] }
-  deriving (Eq, Show, Generic)
+  deriving (Eq, Show, Generic, Show)
 
 
 data AccessAttemptResult = AccessGranted | AccessNotGranted
