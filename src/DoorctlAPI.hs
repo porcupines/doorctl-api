@@ -8,6 +8,7 @@
 
 module DoorctlAPI
   ( Signature (..)
+  , SigningKey (..)
   , NFCKey (..)
   , NFCKeys (..)
   , AccessAttemptResult (..)
@@ -38,6 +39,10 @@ type API = FetchNFCKeysAPI
 
 
 newtype Signature = Signature { unSignature :: ByteString }
+  deriving (Eq, Ord, Generic)
+
+
+newtype SigningKey = SigningKey { unSigningKey :: ByteString }
   deriving (Eq, Ord, Generic)
 
 
