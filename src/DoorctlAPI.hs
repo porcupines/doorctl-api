@@ -83,7 +83,7 @@ verifySignature (PublicSigningKey psk) x sig =
 
 
 newtype NFCKey = NFCKey { unNFCKey :: Text }
-  deriving (Eq, Ord, Show, Generic, FromField, ToField, FromHttpApiData, ToHttpApiData, Show)
+  deriving (Eq, Ord, Show, Generic, FromField, ToField, FromHttpApiData, ToHttpApiData)
 
 instance Serialise NFCKey
 
