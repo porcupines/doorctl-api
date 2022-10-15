@@ -27,6 +27,7 @@ import Control.DeepSeq (NFData)
 import Data.Aeson (ToJSON, FromJSON)
 import Data.ByteString (ByteString)
 #ifndef ghcjs_HOST_OS
+import qualified Data.ByteString.Base64 as Base64
 import Codec.Serialise (Serialise, serialise)
 import Data.ByteString.Lazy (toStrict)
 import qualified Crypto.Sign.Ed25519 as Ed25519
@@ -64,9 +65,9 @@ sign :: Serialise a
      -> a
      -> Signature
 sign (PrivateSigningKey psk) x =
-  Signature . Ed25519.unSignature $
+  Signature . Base64.encodeBase64' . Ed25519.unSignature $
   Ed25519.dsign
-  (Ed25519.SecretKey psk)
+  (Ed25519.SecretKey (Base64.decodeBase64Lenient psk))
   (toStrict (serialise x))
 
 
@@ -78,7 +79,7 @@ verifySignature
   -> Maybe ()
 verifySignature (PublicSigningKey psk) x sig =
   case Ed25519.dverify
-       (Ed25519.PublicKey psk)
+       (Ed25519.PublicKey (Base64.decodeBase64Lenient psk))
        (toStrict (serialise x))
        (Ed25519.Signature (unSignature sig)) of
     True -> pure ()
