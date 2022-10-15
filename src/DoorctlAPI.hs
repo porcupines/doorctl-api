@@ -85,12 +85,17 @@ verifySignature (PublicSigningKey psk) x sig =
 newtype NFCKey = NFCKey { unNFCKey :: Text }
   deriving (Eq, Ord, Show, Generic, FromField, ToField, FromHttpApiData, ToHttpApiData)
 
+instance Serialise NFCKey
+
+
 newtype NFCKeys = NFCKeys { unNFCKeys :: [NFCKey] }
   deriving (Eq, Show, Generic)
 
 
 data AccessAttemptResult = AccessGranted | AccessNotGranted
   deriving (Eq, Ord, Generic, Show)
+
+instance Serialise AccessAttemptResult
 
 
 -- This endpoint fetches the list of active NFC keys, providing a recent
