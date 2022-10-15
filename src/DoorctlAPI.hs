@@ -89,7 +89,9 @@ verifySignature (PublicSigningKey psk) x sig =
 newtype NFCKey = NFCKey { unNFCKey :: Text }
   deriving (Eq, Ord, Show, Generic, FromField, ToField, FromHttpApiData, ToHttpApiData)
 
+#ifndef ghcjs_HOST_OS
 instance Serialise NFCKey
+#endif
 
 
 newtype NFCKeys = NFCKeys { unNFCKeys :: [NFCKey] }
@@ -99,7 +101,9 @@ newtype NFCKeys = NFCKeys { unNFCKeys :: [NFCKey] }
 data AccessAttemptResult = AccessGranted | AccessNotGranted
   deriving (Eq, Ord, Generic, Show)
 
+#ifndef ghcjs_HOST_OS
 instance Serialise AccessAttemptResult
+#endif
 
 
 -- This endpoint fetches the list of active NFC keys, providing a recent
