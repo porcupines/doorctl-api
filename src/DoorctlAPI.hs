@@ -23,11 +23,11 @@ module DoorctlAPI
   ) where
 
 
-import Codec.Serialise (Serialise, serialise)
 import Control.DeepSeq (NFData)
 import Data.Aeson (ToJSON, FromJSON)
 import Data.ByteString (ByteString)
 #ifndef ghcjs_HOST_OS
+import Codec.Serialise (Serialise, serialise)
 import Data.ByteString.Lazy (toStrict)
 import qualified Crypto.Sign.Ed25519 as Ed25519
 import Data.ByteString.Base64.URL (encodeBase64, decodeBase64)
