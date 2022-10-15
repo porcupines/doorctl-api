@@ -27,8 +27,8 @@ import Codec.Serialise (Serialise, serialise)
 import Control.DeepSeq (NFData)
 import Data.Aeson (ToJSON, FromJSON)
 import Data.ByteString (ByteString)
-import Data.ByteString.Lazy (toStrict)
 #ifndef ghcjs_HOST_OS
+import Data.ByteString.Lazy (toStrict)
 import qualified Crypto.Sign.Ed25519 as Ed25519
 import Data.ByteString.Base64.URL (encodeBase64, decodeBase64)
 import Data.Text.Encoding (encodeUtf8)
