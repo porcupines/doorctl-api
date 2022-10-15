@@ -9,7 +9,9 @@ library
     , base <5
     , bytestring
     , deepseq
+    , ed25519
     , postgresql-simple
+    , serialise
     , servant
     , text
     , time

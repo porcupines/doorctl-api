@@ -8,7 +8,10 @@
 
 module DoorctlAPI
   ( Signature (..)
-  , SigningKey (..)
+  , PublicSigningKey (..)
+  , PrivateSigningKey (..)
+  , sign
+  , verifySignature
   , NFCKey (..)
   , NFCKeys (..)
   , AccessAttemptResult (..)
@@ -18,9 +21,12 @@ module DoorctlAPI
   ) where
 
 
+import Codec.Serialise (Serialise, serialise)
 import Control.DeepSeq (NFData)
+import qualified Crypto.Sign.Ed25519 as Ed25519
 import Data.Aeson (ToJSON, FromJSON)
 import Data.ByteString (ByteString)
+import Data.ByteString.Lazy (toStrict)
 #ifndef ghcjs_HOST_OS
 import Data.ByteString.Base64.URL (encodeBase64, decodeBase64)
 import Data.Text.Encoding (encodeUtf8)
@@ -42,8 +48,38 @@ newtype Signature = Signature { unSignature :: ByteString }
   deriving (Eq, Ord, Generic)
 
 
-newtype SigningKey = SigningKey { unSigningKey :: ByteString }
+newtype PublicSigningKey = PublicSigningKey { unPublicKey :: ByteString }
   deriving (Eq, Ord, Generic)
+
+
+newtype PrivateSigningKey = PrivateSigningKey { unPrivateKey :: ByteString }
+  deriving (Eq, Ord, Generic)
+
+
+sign :: Serialise a
+     => PrivateSigningKey
+     -> a
+     -> Signature
+sign (PrivateSigningKey psk) x =
+  Signature . Ed25519.unSignature $
+  Ed25519.dsign
+  (Ed25519.SecretKey psk)
+  (toStrict (serialise x))
+
+
+verifySignature
+  :: Serialise a
+  => PublicSigningKey
+  -> a
+  -> Signature
+  -> Maybe ()
+verifySignature (PublicSigningKey psk) x sig =
+  case Ed25519.dverify
+       (Ed25519.PublicKey psk)
+       (toStrict (serialise x))
+       (Ed25519.Signature (unSignature sig)) of
+    True -> pure ()
+    False -> Nothing
 
 
 newtype NFCKey = NFCKey { unNFCKey :: Text }
