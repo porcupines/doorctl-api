@@ -9,7 +9,6 @@ library
     , base <5
     , bytestring
     , deepseq
-    , ed25519
     , postgresql-simple
     , serialise
     , servant
@@ -17,7 +16,7 @@ library
     , time
 
   if !impl(ghcjs)
-    build-depends: base64
+    build-depends: base64, ed25519
 
   hs-source-dirs: src
 

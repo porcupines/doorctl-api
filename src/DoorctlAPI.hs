@@ -10,8 +10,10 @@ module DoorctlAPI
   ( Signature (..)
   , PublicSigningKey (..)
   , PrivateSigningKey (..)
+#ifndef ghcjs_HOST_OS
   , sign
   , verifySignature
+#endif
   , NFCKey (..)
   , NFCKeys (..)
   , AccessAttemptResult (..)
@@ -56,6 +58,7 @@ newtype PrivateSigningKey = PrivateSigningKey { unPrivateKey :: ByteString }
   deriving (Eq, Ord, Generic, Show)
 
 
+#ifndef ghcjs_HOST_OS
 sign :: Serialise a
      => PrivateSigningKey
      -> a
@@ -80,6 +83,7 @@ verifySignature (PublicSigningKey psk) x sig =
        (Ed25519.Signature (unSignature sig)) of
     True -> pure ()
     False -> Nothing
+#endif
 
 
 newtype NFCKey = NFCKey { unNFCKey :: Text }
