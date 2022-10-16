@@ -81,7 +81,7 @@ verifySignature (PublicSigningKey psk) x sig =
   case Ed25519.dverify
        (Ed25519.PublicKey (Base64.decodeBase64Lenient psk))
        (toStrict (serialise x))
-       (Ed25519.Signature (unSignature sig)) of
+       (Ed25519.Signature (Base64.decodeBase64Lenient (unSignature sig))) of
     True -> pure ()
     False -> Nothing
 #endif
