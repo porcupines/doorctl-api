@@ -15,10 +15,12 @@
           haskellPackages = prev.haskell.packages.ghc944.override {
             overrides = hsFinal: hsPrev: {
               cborg = hsPrev.cborg.overrideAttrs (old: {
+                doHaddock = false;
                 # See: https://github.com/well-typed/cborg/pull/304
                 patches = ./patches/cborg-ghc944.patch;
               });
               servant = final.haskell.lib.overrideCabal hsPrev.servant (old: {
+                doHaddock = false;
                 doCheck = false; # Depends on hspec <2.10, and nixpkgs is newer
               });
             };
