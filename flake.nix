@@ -8,7 +8,7 @@
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachSystem [
       flake-utils.lib.system.aarch64-linux
-      # flake-utils.lib.system.x86_64-linux
+      flake-utils.lib.system.x86_64-linux
     ] (system:
       let
         overlay = final: prev: {
