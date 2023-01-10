@@ -2,6 +2,9 @@ cabal-version: 2.4
 name: doorctl-api
 version: 0.1.0.0
 
+flag controller
+  description: Set to true if this library is to be used on the door controller, rather than the server
+  default: False
 
 library
   build-depends:
@@ -9,7 +12,6 @@ library
     , base <5
     , bytestring
     , deepseq
-    , postgresql-simple
     , servant
     , text
     , time
@@ -19,6 +21,12 @@ library
        base64
      , ed25519
      , serialise
+
+  if flag(controller)
+    cpp-options: -DIS_DOOR_CONTROLLER
+  else
+    build-depends:
+      postgresql-simple
 
   hs-source-dirs: src
 

@@ -36,8 +36,10 @@ import Data.Text.Encoding (encodeUtf8)
 #endif
 import Data.Text (Text)
 import Data.Time.Clock (UTCTime)
+#ifndef IS_DOOR_CONTROLLER
 import Database.PostgreSQL.Simple.FromField (FromField (fromField))
 import Database.PostgreSQL.Simple.ToField (ToField (toField))
+#endif
 import GHC.Generics (Generic)
 import Servant.API ((:<|>), (:>), QueryParam', Required, Get, Post, JSON,
   ToHttpApiData (toQueryParam), FromHttpApiData (parseQueryParam))
@@ -88,7 +90,11 @@ verifySignature (PublicSigningKey psk) x sig =
 
 
 newtype NFCKey = NFCKey { unNFCKey :: Text }
+#if IS_DOOR_CONTROLLER
+  deriving (Eq, Ord, Show, Generic, FromHttpApiData, ToHttpApiData)
+#else
   deriving (Eq, Ord, Show, Generic, FromField, ToField, FromHttpApiData, ToHttpApiData)
+#endif
 
 #ifndef ghcjs_HOST_OS
 instance Serialise NFCKey
@@ -128,6 +134,7 @@ type LogAccessAttemptAPI = "log-access-attempt"
 
 instance NFData AccessAttemptResult
 
+#ifndef IS_DOOR_CONTROLLER
 instance ToField AccessAttemptResult where
   toField = toField . (== AccessGranted)
 
@@ -136,6 +143,7 @@ instance FromField AccessAttemptResult where
     where
       fromBool True = AccessGranted
       fromBool False = AccessNotGranted
+#endif
 
 instance NFData NFCKey
 instance FromJSON NFCKey
